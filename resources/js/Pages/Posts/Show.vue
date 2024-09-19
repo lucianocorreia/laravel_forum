@@ -4,6 +4,7 @@ import Container from "@/Components/Container.vue";
 import { computed } from "vue";
 import Pagination from "@/Components/Pagination.vue";
 import { relativeDate } from "@/Utils/date";
+import Comment from "@/Components/Comment.vue";
 
 const props = defineProps(["post", "comments"]);
 
@@ -27,8 +28,7 @@ const formatedDate = computed(() =>
 
                 <ul class="mt-4 divide-y">
                     <li v-for="comment in comments.data" :key="comment.id" class="px-2 py-4">
-                        <span class="text-sm">{{ comment.body }}</span>
-                        <span class="block mt-1 text-sm text-gray-600">By {{ comment.user.name }} {{  relativeDate(comment.created_at) }} ago</span>
+                        <Comment :comment="comment" />
                     </li>
                 </ul>
 
