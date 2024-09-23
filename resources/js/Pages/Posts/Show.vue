@@ -11,21 +11,26 @@
             <div class="mt-12">
                 <h2 class="text-xl font-semibold">Comments</h2>
 
-                <form v-if="$page.props.auth.user" @submit.prevent="addComment" class="mt-4">
+                <form v-if="$page.props.auth.user"
+                    @submit.prevent="() => commentIdEditing ? updateComment() : addComment()" class="mt-4">
                     <div>
                         <InputLabel for="body" class="sr-only">Comment</InputLabel>
-                        <Textarea id="body" v-model="commentForm.body" rows="4"
+                        <Textarea ref="commentTextareaRef" id="body" v-model="commentForm.body" rows="4"
                             placeholder="Speak your mind Spock..." />
                         <InputError :message="commentForm.errors.body" class="mt-1" />
                     </div>
 
-                    <PrimaryButton type="submit" class="mt-2" :disabled="commentForm.processing">Add Comment
+                    <PrimaryButton type="submit" class="mt-2" :disabled="commentForm.processing"
+                        v-text="commentIdEditing ? 'Update Comment' : 'Add Comment'">
                     </PrimaryButton>
+                    <SecondaryButton v-if="commentIdEditing" @click="cancelEditComment" class="ml-2">
+                        Cancel
+                    </SecondaryButton>
                 </form>
 
                 <ul class="mt-4 divide-y">
                     <li v-for="comment in comments.data" :key="comment.id" class="px-2 py-4">
-                        <Comment :comment="comment" @delete="deleteComment" />
+                        <Comment :comment="comment" @delete="deleteComment" @edit="editComment" />
                     </li>
                 </ul>
 
@@ -38,7 +43,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Container from "@/Components/Container.vue";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import Pagination from "@/Components/Pagination.vue";
 import { relativeDate } from "@/Utils/date";
 import Comment from "@/Components/Comment.vue";
@@ -48,6 +53,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { useForm, router } from "@inertiajs/vue3";
 import Textarea from "@/Components/Textarea.vue";
 import InputError from "@/Components/InputError.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
 
 const props = defineProps(["post", "comments"]);
 
@@ -58,12 +64,37 @@ const formatedDate = computed(() =>
 const commentForm = useForm({
     body: "",
 });
+const commentTextareaRef = ref(null);
+const commentIdEditing = ref(null);
+const commmentEditing = computed(() => {
+    return props.comments.data.find((comment) => comment.id === commentIdEditing.value);
+});
+const editComment = (commentId) => {
+    commentIdEditing.value = commentId;
+    commentForm.body = commmentEditing.value?.body;
+
+    commentTextareaRef.value.focus();
+};
+
+const cancelEditComment = () => {
+    commentIdEditing.value = null;
+    commentForm.reset();
+};
 
 const addComment = () => {
-    console.log(props.post.id);
     commentForm.post(route("posts.comments.store", props.post.id), {
         preserveScroll: true,
         onSuccess: () => {
+            commentForm.reset();
+        },
+    });
+};
+
+const updateComment = () => {
+    commentForm.put(route("comments.update", { comment: commentIdEditing.value, page: props.comments.meta.current_page }), {
+        preserveScroll: true,
+        onSuccess: () => {
+            commentIdEditing.value = null;
             commentForm.reset();
         },
     });
