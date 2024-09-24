@@ -36,7 +36,8 @@ class CommentController extends BaseController
             'post_id' => $post->id
         ]);
 
-        return to_route('posts.show', $post);
+        return to_route('posts.show', $post)
+            ->banner('Comment added successfully');
     }
 
     /**
@@ -50,7 +51,8 @@ class CommentController extends BaseController
 
         $comment->update($data);
 
-        return to_route('posts.show', [$comment->post_id, 'page' => $request->query('page')]);
+        return to_route('posts.show', [$comment->post_id, 'page' => $request->query('page')])
+            ->banner('Comment updated successfully');
     }
 
     /**
@@ -60,6 +62,7 @@ class CommentController extends BaseController
     {
         $comment->delete();
 
-        return to_route('posts.show', ['post' => $comment->post_id, 'page' => $request->query('page')]);
+        return to_route('posts.show', ['post' => $comment->post_id, 'page' => $request->query('page')])
+            ->banner('Comment deleted successfully');
     }
 }

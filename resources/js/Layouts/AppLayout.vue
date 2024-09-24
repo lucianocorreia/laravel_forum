@@ -1,50 +1,3 @@
-<script setup>
-import { ref } from "vue";
-import { Head, Link, router, usePage } from "@inertiajs/vue3";
-import ApplicationMark from "@/Components/ApplicationMark.vue";
-import Banner from "@/Components/Banner.vue";
-import Dropdown from "@/Components/Dropdown.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
-import NavLink from "@/Components/NavLink.vue";
-import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-
-defineProps({
-    title: String,
-});
-
-const menu = [
-    {
-        name: "Dashboard",
-        url: route("dashboard"),
-        route: "dashboard",
-        when: () => usePage().props.auth.user,
-    },
-    {
-        name: "Posts",
-        url: route("posts.index"),
-        route: "posts.index",
-    },
-];
-
-const showingNavigationDropdown = ref(false);
-
-const switchToTeam = (team) => {
-    router.put(
-        route("current-team.update"),
-        {
-            team_id: team.id,
-        },
-        {
-            preserveState: false,
-        }
-    );
-};
-
-const logout = () => {
-    router.post(route("logout"));
-};
-</script>
-
 <template>
     <div>
 
@@ -288,5 +241,55 @@ const logout = () => {
                 <slot />
             </main>
         </div>
+
+        <ConfirmationModalWrapper />
     </div>
 </template>
+
+<script setup>
+import { ref } from "vue";
+import { Head, Link, router, usePage } from "@inertiajs/vue3";
+import ApplicationMark from "@/Components/ApplicationMark.vue";
+import Banner from "@/Components/Banner.vue";
+import Dropdown from "@/Components/Dropdown.vue";
+import DropdownLink from "@/Components/DropdownLink.vue";
+import NavLink from "@/Components/NavLink.vue";
+import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
+import ConfirmationModalWrapper from "@/Components/ConfirmationModalWrapper.vue";
+
+defineProps({
+    title: String,
+});
+
+const menu = [
+    {
+        name: "Dashboard",
+        url: route("dashboard"),
+        route: "dashboard",
+        when: () => usePage().props.auth.user,
+    },
+    {
+        name: "Posts",
+        url: route("posts.index"),
+        route: "posts.index",
+    },
+];
+
+const showingNavigationDropdown = ref(false);
+
+const switchToTeam = (team) => {
+    router.put(
+        route("current-team.update"),
+        {
+            team_id: team.id,
+        },
+        {
+            preserveState: false,
+        }
+    );
+};
+
+const logout = () => {
+    router.post(route("logout"));
+};
+</script>

@@ -54,6 +54,7 @@ import { useForm, router } from "@inertiajs/vue3";
 import Textarea from "@/Components/Textarea.vue";
 import InputError from "@/Components/InputError.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
+import { useConfirm } from "@/Utils/Composables/useConfirm";
 
 const props = defineProps(["post", "comments"]);
 
@@ -64,11 +65,15 @@ const formatedDate = computed(() =>
 const commentForm = useForm({
     body: "",
 });
+
+const { confirmation } = useConfirm();
+
 const commentTextareaRef = ref(null);
 const commentIdEditing = ref(null);
 const commmentEditing = computed(() => {
     return props.comments.data.find((comment) => comment.id === commentIdEditing.value);
 });
+
 const editComment = (commentId) => {
     commentIdEditing.value = commentId;
     commentForm.body = commmentEditing.value?.body;
@@ -90,7 +95,12 @@ const addComment = () => {
     });
 };
 
-const updateComment = () => {
+const updateComment = async () => {
+    if(! await confirmation('Are you sure you want to update this comment?')) {
+        commentTextareaRef.value?.focus();
+        return;
+    }
+
     commentForm.put(route("comments.update", { comment: commentIdEditing.value, page: props.comments.meta.current_page }), {
         preserveScroll: true,
         onSuccess: () => {
@@ -100,11 +110,17 @@ const updateComment = () => {
     });
 };
 
-const deleteComment = (commentId) => router.delete(route('comments.destroy', { comment: commentId, page: props.comments.meta.current_page }), {
-    preserveScroll: true,
-    onSuccess: () => {
-        // Do something after the comment is deleted
-    },
-});
+const deleteComment = async (commentId) => {
+    if(! await confirmation('Are you sure you want to delete this comment?')) {
+        return;
+    }
+
+    router.delete(route('comments.destroy', { comment: commentId, page: props.comments.meta.current_page }), {
+        preserveScroll: true,
+        onSuccess: () => {
+            // Do something after the comment is deleted
+        },
+    });
+};
 
 </script>
