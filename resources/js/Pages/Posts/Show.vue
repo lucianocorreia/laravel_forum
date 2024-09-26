@@ -14,8 +14,8 @@
                     @submit.prevent="() => commentIdEditing ? updateComment() : addComment()" class="mt-4">
                     <div>
                         <InputLabel for="body" class="sr-only">Comment</InputLabel>
-                        <Textarea ref="commentTextareaRef" id="body" v-model="commentForm.body" rows="4"
-                            placeholder="Speak your mind Spock..." />
+                        <MarkdownEditor ref="commentTextareaRef" id="body" v-model="commentForm.body"
+                            editorClass="min-h-[160px]" placeholder="Enter som text..." />
                         <InputError :message="commentForm.errors.body" class="mt-1" />
                     </div>
 
@@ -54,6 +54,7 @@ import Textarea from "@/Components/Textarea.vue";
 import InputError from "@/Components/InputError.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import { useConfirm } from "@/Utils/Composables/useConfirm";
+import MarkdownEditor from "@/Components/MarkdownEditor.vue";
 
 const props = defineProps(["post", "comments"]);
 
@@ -77,7 +78,7 @@ const editComment = (commentId) => {
     commentIdEditing.value = commentId;
     commentForm.body = commmentEditing.value?.body;
 
-    commentTextareaRef.value.focus();
+    commentTextareaRef.value?.focus();
 };
 
 const cancelEditComment = () => {

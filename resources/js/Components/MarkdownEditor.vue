@@ -67,12 +67,17 @@ import { Markdown } from "tiptap-markdown";
 import { watch } from "vue";
 import "remixicon/fonts/remixicon.css";
 import Link from "@tiptap/extension-link";
+import Placeholder from "@tiptap/extension-placeholder";
 
 const props = defineProps({
-    modelValue: ''
+    modelValue: '',
+    editorClass: '',
+    placeholder: '',
 });
 
 const emit = defineEmits(['update:modelValue']);
+
+defineExpose({ focus: () => editor.value.commands.focus() });
 
 const editor = useEditor({
     extensions: [
@@ -83,10 +88,13 @@ const editor = useEditor({
         }),
         Markdown,
         Link,
+        Placeholder.configure({
+            placeholder: props.placeholder,
+        })
     ],
     editorProps: {
         attributes: {
-            class: 'min-h-[512px] prose prose-sm max-w-none py-1.5 px-3',
+            class: `prose prose-sm max-w-none py-1.5 px-3 ${props.editorClass}`,
         },
     },
     onUpdate: () => emit('update:modelValue', editor.value?.storage.markdown.getMarkdown())
@@ -99,15 +107,25 @@ watch(() => props.modelValue, (value) => {
 }, { immediate: true });
 
 const promptUserForHref = () => {
-    if(editor.value?.isActive('link')) {
+    if (editor.value?.isActive('link')) {
         return editor.value?.chain().focus().unsetLink().run();
     }
 
     const href = window.prompt('Enter the URL');
 
-    if(! href) return editor.value?.chain().focus().run();
+    if (!href) return editor.value?.chain().focus().run();
 
     return editor.value?.chain().focus().setLink({ href }).run();
 };
 
 </script>
+
+<style scoped>
+:deep(.tiptap p.is-editor-empty:first-child::before) {
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+}
+</style>

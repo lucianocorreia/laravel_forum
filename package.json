@@ -21,6 +21,7 @@
     "dependencies": {
         "@heroicons/vue": "^2.1.5",
         "@tiptap/extension-link": "^2.7.3",
+        "@tiptap/extension-placeholder": "^2.7.4",
         "@tiptap/pm": "^2.7.3",
         "@tiptap/starter-kit": "^2.7.3",
         "@tiptap/vue-3": "^2.7.3",

@@ -4,7 +4,7 @@
             <img :src="comment.user.profile_photo_url" alt="User profile photo" class="w-10 h-10 rounded-full" />
         </div>
         <div class="flex-1">
-            <p class="mt-1 break-all">{{ comment.body }}</p>
+            <div class="mt-1 prose-sm prose max-w-none" v-html="comment.html"></div>
             <span class="block mt-1 text-xs text-gray-600">
                 By {{ comment.user.name }} {{ relativeDate(comment.created_at) }} ago
             </span>

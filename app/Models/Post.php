@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\ConvertMarkdownToHtml;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,7 @@ use Illuminate\Support\Str;
 class Post extends Model
 {
     use HasFactory;
+    use ConvertMarkdownToHtml;
 
     protected $guarded = ['id'];
 
@@ -23,13 +25,6 @@ class Post extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
-    }
-
-    protected static function booted()
-    {
-        static::saving(fn(self $post) => $post->fill([
-            'html' => str($post->body)->markdown(),
-        ]));
     }
 
     public function title(): Attribute
