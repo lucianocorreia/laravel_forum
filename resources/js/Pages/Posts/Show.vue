@@ -4,8 +4,7 @@
             <h1 class="text-2xl font-bold">{{ post.title }}</h1>
             <span class="block mt-1 text-sm text-gray-600">{{ formatedDate }} ago by {{ post.user.name }}</span>
 
-            <article class="mt-6">
-                <pre class="font-sans whitespace-pre-wrap">{{ post.body }}</pre>
+            <article class="mt-6 prose-sm prose max-w-none" v-html="post.html">
             </article>
 
             <div class="mt-12">
@@ -96,7 +95,7 @@ const addComment = () => {
 };
 
 const updateComment = async () => {
-    if(! await confirmation('Are you sure you want to update this comment?')) {
+    if (! await confirmation('Are you sure you want to update this comment?')) {
         commentTextareaRef.value?.focus();
         return;
     }
@@ -111,7 +110,7 @@ const updateComment = async () => {
 };
 
 const deleteComment = async (commentId) => {
-    if(! await confirmation('Are you sure you want to delete this comment?')) {
+    if (! await confirmation('Are you sure you want to delete this comment?')) {
         return;
     }
 

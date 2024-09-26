@@ -25,10 +25,25 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
+    protected static function booted()
+    {
+        static::saving(fn(self $post) => $post->fill([
+            'html' => str($post->body)->markdown(),
+        ]));
+    }
+
     public function title(): Attribute
     {
         return Attribute::set(fn($value) => Str::title($value));
     }
+
+    // public function body(): Attribute
+    // {
+    //     return Attribute::set(fn($value) => [
+    //         'body' => $value,
+    //         'html' => str($value)->markdown(),
+    //     ]);
+    // }
 
     public function showRoute(array $parameters = []): string
     {
