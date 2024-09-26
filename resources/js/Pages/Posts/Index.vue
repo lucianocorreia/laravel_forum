@@ -12,7 +12,7 @@ const formatedDate = (post) => relativeDate(post.created_at);
 </script>
 
 <template>
-    <AppLayout>
+    <AppLayout title="Posts">
         <Container>
             <ul class="divide-y">
                 <li v-for="post in posts.data" :key="post.id">
