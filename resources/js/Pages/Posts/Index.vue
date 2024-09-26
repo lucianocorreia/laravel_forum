@@ -16,7 +16,7 @@ const formatedDate = (post) => relativeDate(post.created_at);
         <Container>
             <ul class="divide-y">
                 <li v-for="post in posts.data" :key="post.id">
-                    <Link :href="route('posts.show', post.id)" class="block px-2 py-4 group">
+                    <Link :href="post.routes.show" class="block px-2 py-4 group">
                     <span class="text-lg font-bold group-hover:text-indigo-500">{{ post.title }}</span>
                     <span class="block mt-1 text-sm text-gray-600">{{ formatedDate(post) }} ago by {{ post.user.name
                         }}</span>

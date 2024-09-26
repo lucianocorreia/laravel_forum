@@ -10,7 +10,7 @@ use function Pest\Laravel\post;
 
 beforeEach(function () {
     $this->validData = [
-        'title' => 'My first post',
+        'title' => 'My First Post',
         'body' => str_repeat('a', 100),
     ];
 });
@@ -39,7 +39,7 @@ it('redirects to the route show page', function () {
 
     actingAs($user)
         ->post(route('posts.store'), $this->validData)
-        ->assertRedirect(route('posts.show', Post::latest('id')->first()));
+        ->assertRedirect(Post::latest('id')->first()->showRoute());
 });
 
 it('requires valid data', function (array $badData, array|string $errors) {
