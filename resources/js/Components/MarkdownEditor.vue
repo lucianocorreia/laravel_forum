@@ -53,6 +53,7 @@
                     :class="{ 'bg-indigo-500 text-white': editor?.isActive('link'), 'hover:bg-gray-200': !editor?.isActive('link') }"
                     class="px-3 py-2" title="Add Link"><i class="ri-link"></i></button>
             </li>
+            <slot name="toolbar" :editor="editor"></slot>
         </menu>
 
         <EditorContent :editor="editor" />
