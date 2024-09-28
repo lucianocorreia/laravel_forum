@@ -1,7 +1,7 @@
 <template>
     <AppLayout title="Create a Post">
         <Container>
-            <h1 class="text-2xl font-bold">Create Post</h1>
+            <PageHeading>Create Post</PageHeading>
 
             <form @submit.prevent="createPost" class="mt-6">
                 <div>
@@ -43,6 +43,7 @@ import Container from "@/Components/Container.vue";
 import MarkdownEditor from "@/Components/MarkdownEditor.vue";
 import axios from "axios";
 import { isInProduction } from "@/Utils/environment";
+import PageHeading from "@/Components/PageHeading.vue";
 
 const form = useForm({
     title: "",

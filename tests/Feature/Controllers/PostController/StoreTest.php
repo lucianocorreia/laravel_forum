@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controllers\PostController;
 
 use App\Models\Post;
+use App\Models\Topic;
 use App\Models\User;
 
 use function Pest\Laravel\actingAs;
@@ -11,6 +12,7 @@ use function Pest\Laravel\post;
 beforeEach(function () {
     $this->validData = [
         'title' => 'My First Post',
+        'topic_id' => Topic::factory()->create()->getKey(),
         'body' => str_repeat('a', 100),
     ];
 });
@@ -23,12 +25,13 @@ it('requires authentication', function () {
 it('stores a post', function () {
     /** @var User $user */
     $user = User::factory()->create();
+    $data = $this->validData;
 
     actingAs($user)
-        ->post(route('posts.store'), $this->validData);
+        ->post(route('posts.store'), $data);
 
     $this->assertDatabaseHas(Post::class, [
-        ...$this->validData,
+        ...$data,
         'user_id' => $user->id
     ]);
 });
