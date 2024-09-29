@@ -2,9 +2,12 @@
 
 namespace App\Policies;
 
+use App\Models\Comment;
 use App\Models\Like;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Database\Eloquent\Model;
 
 class LikePolicy
 {
@@ -13,7 +16,7 @@ class LikePolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -21,15 +24,19 @@ class LikePolicy
      */
     public function view(User $user, Like $like): bool
     {
-        //
+        return true;
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Model $likeable): bool
     {
-        //
+        if (! in_array($likeable::class, [Post::class, Comment::class])) {
+            return false;
+        }
+
+        return $likeable->likes()->whereBelongsTo($user)->doesntExist();
     }
 
     /**
@@ -37,7 +44,7 @@ class LikePolicy
      */
     public function update(User $user, Like $like): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -45,7 +52,7 @@ class LikePolicy
      */
     public function delete(User $user, Like $like): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -53,7 +60,7 @@ class LikePolicy
      */
     public function restore(User $user, Like $like): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -61,6 +68,6 @@ class LikePolicy
      */
     public function forceDelete(User $user, Like $like): bool
     {
-        //
+        return true;
     }
 }
