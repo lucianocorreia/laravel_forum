@@ -9,6 +9,10 @@
             <PageHeading class="mt-2">{{ post.title }}</PageHeading>
             <span class="block mt-1 text-sm text-gray-600">{{ formatedDate }} by {{ post.user.name }}</span>
 
+            <div class="mt-4">
+                <span class="font-bold text-pink-500">{{ post.likes_count }} likes</span>
+            </div>
+
             <article class="mt-6 prose-sm prose max-w-none" v-html="post.html">
             </article>
 

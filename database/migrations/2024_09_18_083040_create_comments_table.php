@@ -22,6 +22,7 @@ return new class extends Migration
 
             $table->longText('body');
             $table->longText('html');
+            $table->unsignedBigInteger('likes_count')->default(0);
         });
     }
 

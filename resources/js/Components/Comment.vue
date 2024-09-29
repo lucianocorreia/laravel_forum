@@ -6,7 +6,7 @@
         <div class="flex-1">
             <div class="mt-1 prose-sm prose max-w-none" v-html="comment.html"></div>
             <span class="block mt-1 text-xs text-gray-600">
-                By {{ comment.user.name }} {{ relativeDate(comment.created_at) }}
+                By {{ comment.user.name }} {{ relativeDate(comment.created_at) }} | <span class="text-pink-500">{{  comment.likes_count }} likes</span>
             </span>
             <div class="flex justify-end mt-1 space-x-3 empty:hidden">
                 <form v-if="comment.can?.update" @submit.prevent="$emit('edit', comment.id)">
