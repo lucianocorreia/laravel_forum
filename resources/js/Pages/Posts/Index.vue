@@ -41,7 +41,7 @@ const formatedDate = (post) => relativeDate(post.created_at);
                     <Link :href="post.routes.show" class="block px-2 py-4 group">
                     <span class="text-lg font-bold group-hover:text-indigo-500">{{ post.title }}</span>
                     <span class="block mt-1 text-sm text-gray-600">
-                        {{ formatedDate(post) }} ago by {{ post.user.name }}
+                        {{ formatedDate(post) }} by {{ post.user.name }}
                     </span>
                     </Link>
 
