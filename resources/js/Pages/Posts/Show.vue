@@ -1,4 +1,5 @@
 <template>
+
     <Head>
         <link rel="canonical" :href="post.routes.show" />
     </Head>
@@ -11,6 +12,19 @@
 
             <div class="mt-4">
                 <span class="font-bold text-pink-500">{{ post.likes_count }} likes</span>
+
+                <div v-if="$page.props.auth.user" class="mt-2">
+                    <Link v-if="post.can.like" :href="route('likes.store', ['post', post.id])" method="post"
+                        class="inline-block bg-indigo-600 hover:bg-pink-500 transition-colors text-white py-1.5 px-3 rounded-full">
+                    <HandThumbUpIcon class="inline-block mr-1 size-4" />
+                    Like Post
+                    </Link>
+                    <Link v-else :href="route('likes.destroy', ['post', post.id])" method="delete"
+                        class="inline-block bg-indigo-600 hover:bg-pink-500 transition-colors text-white py-1.5 px-3 rounded-full">
+                    <HandThumbDownIcon class="inline-block mr-1 size-4" />
+                    Unlike Post
+                    </Link>
+                </div>
             </div>
 
             <article class="mt-6 prose-sm prose max-w-none" v-html="post.html">
@@ -58,7 +72,7 @@ import Comment from "@/Components/Comment.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import { useForm, router, Head } from "@inertiajs/vue3";
+import { useForm, router, Head, Link } from "@inertiajs/vue3";
 import Textarea from "@/Components/Textarea.vue";
 import InputError from "@/Components/InputError.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
@@ -66,6 +80,7 @@ import { useConfirm } from "@/Utils/Composables/useConfirm";
 import MarkdownEditor from "@/Components/MarkdownEditor.vue";
 import PageHeading from "@/Components/PageHeading.vue";
 import Pill from "@/Components/Pill.vue";
+import { HandThumbDownIcon, HandThumbUpIcon } from "@heroicons/vue/20/solid";
 
 const props = defineProps(["post", "comments"]);
 
